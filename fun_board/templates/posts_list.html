@@ -1,0 +1,39 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'default.html' %}
+
+{% block head_title %}
+    Список объявлений
+{% endblock head_title %}
+
+{% block title %}
+    <h3> Список объявлений </h3>
+{% endblock title %}
+
+{% block content %}
+    <h4> Количество объявлений: {{ posts|length }} </h4>
+    {% if posts %}
+
+        <table>
+            <tr>
+                <td>Заголовок</td>
+                <td>Создана</td>
+                <td>Категория</td>
+                <td>Автор</td>
+                <td>Просмотр</td>
+            </tr>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.created|date:'d M Y' }}</td>
+                    <td>{{ post.category }}</td>
+                    <td>{{ post.author.user.username }}</td>
+                    <td><a href="/posts/{{ post.id }}">Просмотр</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <h2>Объявлений нет!</h2>
+    {% endif %}
+{% endblock content %}
+

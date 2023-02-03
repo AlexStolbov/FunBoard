@@ -1,0 +1,19 @@
+{% extends 'default.html' %}
+
+{% block head_title %}
+    Аутентификация
+{% endblock head_title %}
+
+{% block title %}
+    Ввод одноразового кода.
+{% endblock title %}
+
+{% block content %}
+    На почту был отправлен код доступа к сайту.
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Login">
+    </form>
+{% endblock content %}
+

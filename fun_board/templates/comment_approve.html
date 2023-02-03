@@ -1,0 +1,54 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'default.html' %}
+
+{% block head_title %}
+    Утверждение откликов
+{% endblock head_title %}
+
+{% block title %}
+    <h3> Утверждение откликов </h3>
+{% endblock title %}
+
+{% block content %}
+    {{ post.title }}
+
+    <h5> Отклики </h5>
+
+    {% if comments %}
+
+        <table>
+            <tr>
+                <td>Автор</td>
+                <td>Создан</td>
+                <td>Содержание</td>
+                <td>Одобрить</td>
+                <td>Удалить</td>
+            </tr>
+            {% for comment in comments %}
+                <tr>
+                    <td>{{ comment.author }}</td>
+                    <td>{{ comment.created|date:'d M Y' }}</td>
+                    <td>{{ comment.content }}</td>
+                    <td>
+                        {% if not comment.approved %}
+                            <a href="/posts/{{ post.id}}/set_approve?comment_id={{ comment.id }}">Одобрить</a>
+                        {% else %}
+                            одобрен
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if not comment.deleted %}
+                            <a href="/posts/{{ post.id}}/set_delete?comment_id={{ comment.id }}">Удалить</a>
+                        {% else %}
+                            удален
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    {% else %}
+        <h5>Откликов нет!</h5>
+    {% endif %}
+{% endblock content %}
+
