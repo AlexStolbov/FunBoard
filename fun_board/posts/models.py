@@ -15,6 +15,8 @@ class PortalUser(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
+    # Отправлять пользователю новостную рассылку
+    subscribers = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.user.username} ({self.rating})'

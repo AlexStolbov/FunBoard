@@ -9,3 +9,6 @@ EMAIL_HOST_USER='user_name'
 EMAIL_HOST_PASSWORD='123'
 EMAIL_USE_SSL=True
 
+
+Запуск Celery с выполнение по расписанию
+celery -A fun_board worker -l INFO -B

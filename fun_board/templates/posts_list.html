@@ -1,4 +1,4 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+<!--  ToDo добавить фильтры по объявлениям -->
 {% extends 'default.html' %}
 
 {% block head_title %}
@@ -36,7 +36,14 @@
         <h2>Объявлений нет!</h2>
     {% endif %}
 
-    <a href="create/{{ post.id }}">Создать объявление</a>
+    {% if user.is_authenticated %}
+        <h5><a href="create/{{ post.id }}">Создать объявление</a></h5>
+        {% if portal_user.subscribers %}
+            <h5><a href="subscribe_off/">Отписаться от новостей</a></h5>
+        {% else %}
+            <h5><a href="subscribe_on/">Подписаться на новости</a></h5>
+        {% endif %}
+    {% endif %}
 
 {% endblock content %}
 

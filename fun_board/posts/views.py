@@ -12,7 +12,15 @@ class PostList(ListView):
     model = Posts
     template_name = 'posts_list.html'
     context_object_name = 'posts'
+    # ToDo make paginate
     paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            logger_debug_one.info(f'post list {self.request.user}')
+            context['portal_user'] = PortalUser.objects.get(user=self.request.user)
+        return context
 
 
 class PostDetail(LoginRequiredMixin, DetailView):
@@ -30,7 +38,7 @@ class PostDetail(LoginRequiredMixin, DetailView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(LoginRequiredMixin, CreateView):
     model = Posts
     form_class = PostCreateForm
     template_name = 'post_create.html'
@@ -65,7 +73,6 @@ class CommentCreate(LoginRequiredMixin, FormView):
         return redirect(f'/posts/{self.request.POST.get("post_pk")}')
 
     def create_comment(self):
-        # logger_debug_one.info(f'comment created {self.request.POST}')
         comment = Comments()
         comment.author = PortalUser.objects.get(user=self.request.user)
         comment.post = Posts.objects.get(pk=self.request.POST.get('post_pk'))
@@ -108,3 +115,21 @@ def comment_delete(request, *args, **kwargs):
     comment.deleted_notice = True
     comment.save()
     return redirect(f'/posts/{comment.post.id}')
+
+
+def subscribe_on(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        subscribe_change(request.user, True)
+    return redirect(f'/posts/')
+
+
+def subscribe_off(request, *args, **kwargs):
+    if request.user.is_authenticated:
+        subscribe_change(request.user, False)
+    return redirect(f'/posts/')
+
+
+def subscribe_change(user, subscribe):
+    portal_user = PortalUser.objects.get(user=user)
+    portal_user.subscribers = subscribe
+    portal_user.save()
