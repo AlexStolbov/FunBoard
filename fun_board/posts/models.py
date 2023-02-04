@@ -8,6 +8,11 @@ from . import resources
 # Create your models here.
 
 class PortalUser(models.Model):
+    """
+    Пользователи портала.
+    Создаются автоматически при создании user в Django.
+    Являются авторами объявлений и откликов.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
 
@@ -16,6 +21,9 @@ class PortalUser(models.Model):
 
 
 class Posts(models.Model):
+    """
+    Объявления.
+    """
     author = models.ForeignKey(PortalUser, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=300)
@@ -30,6 +38,9 @@ class Posts(models.Model):
 
 
 class Comments(models.Model):
+    """
+    Отклики на объявления.
+    """
     author = models.ForeignKey(PortalUser, on_delete=models.CASCADE)
     post = models.ForeignKey(Posts, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)

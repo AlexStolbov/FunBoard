@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -163,3 +167,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # auth
 LOGIN_URL = '/sign/credential/'
 LOGIN_REDIRECT_URL = '/'
+
+# Send email
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@yandex.ru'
