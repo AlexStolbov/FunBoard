@@ -1,4 +1,4 @@
-import random
+
 from django.views.generic import FormView
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
@@ -31,16 +31,15 @@ class LoginCredentialView(FormView):
             logger_debug_one.info(f'Login: bad users data. {username} {password}')
             target = redirect('/posts')
         else:
-            secret_key = random.randint(0, 1000000)
-            SecretKey.new_secret_key(user=user, secret_key=secret_key)
-            logger_debug_one.info(f'Login: send secret key {username}.')
+            new_secret_key = SecretKey.new_secret_key(user=user)
             send_mail(
                 subject='Login to Fun board',
-                message=f'Для входа используйте ключ: {secret_key}',
+                message=f'Для входа используйте ключ: {new_secret_key}',
                 from_email='',
                 recipient_list=[user.email],
                 fail_silently=False,
             )
+            logger_debug_one.info(f'Login: send secret key {username}.')
             target = redirect(f'key/?username={username}')
 
         return target

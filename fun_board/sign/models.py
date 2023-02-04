@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 import logging
+import random
 
 logger_debug_one = logging.getLogger("debug_one")
 
@@ -26,7 +27,7 @@ class SecretKey(models.Model):
             return None
 
     @staticmethod
-    def new_secret_key(user: User, secret_key: int):
+    def new_secret_key(user: User) -> int:
         """
         Очищает все ранее выданные ключи.
         Записывает новый ключ.
@@ -35,4 +36,6 @@ class SecretKey(models.Model):
         logger_debug_one.info(f'old keys. {old_keys}')
         for old in old_keys:
             old.delete()
-        SecretKey(user=user, secret_key=secret_key).save()
+        new_secret_key = random.randint(0, 1000000)
+        SecretKey(user=user, secret_key=new_secret_key).save()
+        return new_secret_key
