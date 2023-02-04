@@ -2,7 +2,7 @@ import logging
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import CommentCreateForm
+from .forms import PostCreateForm, CommentCreateForm
 from .models import Posts, Comments, PortalUser
 
 logger_debug_one = logging.getLogger("debug_one")
@@ -28,6 +28,22 @@ class PostDetail(LoginRequiredMixin, DetailView):
         context['comments'] = Comments.objects.filter(
             post=self.object.id).filter(deleted=False).filter(approved=True)
         return context
+
+
+class PostCreate(CreateView):
+    model = Posts
+    form_class = PostCreateForm
+    template_name = 'post_create.html'
+    success_url = '/posts/'
+
+    def form_valid(self, form):
+        """
+        Заполняет автора у объявления
+        """
+        post = form.save(commit=False)
+        post.author = PortalUser.objects.get(user=self.request.user)
+
+        return super().form_valid(form)
 
 
 class CommentCreate(LoginRequiredMixin, FormView):

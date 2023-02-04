@@ -1,0 +1,22 @@
+{% extends 'default.html' %}
+
+{% block head_title %}
+    Объявление
+{% endblock head_title %}
+
+{% block title %}
+    <h5>
+        <a href="/posts/">Список объявлений</a>
+    </h5>
+
+    Создание объявления
+{% endblock title %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+{% endblock content %}
+

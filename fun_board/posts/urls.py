@@ -1,11 +1,13 @@
 from django.urls import path
 
-from .views import PostList, PostDetail, CommentCreate, CommentApprove
+from .views import PostList, PostCreate, PostDetail, CommentCreate, CommentApprove
 from .views import comment_approve, comment_delete
 
 urlpatterns = [
     path('', PostList.as_view(), name='posts_list'),
-    # просмотр статьи
+    # создание объявления
+    path('create/', PostCreate.as_view(), name='post_create'),
+    # просмотр объявления
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),
     # заполнить или записать отклик
     path('<int:pk>/comment/', CommentCreate.as_view(), name='post_comment'),
