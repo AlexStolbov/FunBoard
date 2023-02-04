@@ -1,14 +1,21 @@
-
-from django.views.generic import FormView
+import logging
+from django.views.generic import FormView, CreateView
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
+from django.urls import reverse_lazy
 from .forms import LoginCredentialForm, LoginKeyForm
 from .models import SecretKey
-import logging
 
 logger_debug_one = logging.getLogger("debug_one")
+
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy("login_credential")
+    template_name = "signup.html"
 
 
 class LoginCredentialView(FormView):
